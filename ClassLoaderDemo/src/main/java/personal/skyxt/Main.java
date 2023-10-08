@@ -16,23 +16,13 @@ public class Main {
         URL v1Url = null;
         URL v2Url = null;
         try {
-            //添加判断，判断jar包是否存在，不存在要抛出异常警告
+            //TODO 添加判断，判断jar包是否存在，不存在要抛出异常警告
             String basePath = new File("./ClassLoaderDemo/lib").getCanonicalFile().getPath();
             v1Url = new File(basePath + File.separator + "v1/ClassLoaderPrint.jar").toURI().toURL();
             v2Url = new File(basePath + File.separator + "v2/ClassLoaderPrint.jar").toURI().toURL();
-            URLClassLoader v1ClassLoader = new URLClassLoader(new URL[]{ v1Url }, null);
-            Class<?> v1Class = Class.forName("test.ClassLoaderPrint", true, v1ClassLoader);
-            Method printv1 = v1Class.getMethod("print", null);
-            System.out.println("---------------");
-            printv1.invoke(v1Class.newInstance(), null);
-            System.out.println("---------------");
+            print(v1Url);
+            print(v2Url);
 
-            URLClassLoader v2ClassLoader = new URLClassLoader(new URL[]{ v2Url }, null);
-            Class<?> v2Class = Class.forName("test.ClassLoaderPrint", true, v2ClassLoader);
-            Method printv2 = v2Class.getMethod("print", null);
-            System.out.println("---------------");
-            printv2.invoke(v1Class.newInstance(), null);
-            System.out.println("---------------");
             /*
             //以下方式会导致ClassCastException
             Class<?> aClass = Class.forName("test.ClassLoaderPrint", true, urlClassLoader);
@@ -53,6 +43,19 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-
     }
+
+    private static void print(URL url) throws ClassNotFoundException,
+            NoSuchMethodException,
+            InstantiationException,
+            IllegalAccessException,
+            InvocationTargetException {
+        URLClassLoader v1ClassLoader = new URLClassLoader(new URL[]{ url }, null);
+        Class<?> v1Class = Class.forName("test.ClassLoaderPrint", true, v1ClassLoader);
+        Method printv1 = v1Class.getMethod("print", null);
+        System.out.println("---------------");
+        printv1.invoke(v1Class.newInstance(), null);
+        System.out.println("---------------");
+    }
+
 }
