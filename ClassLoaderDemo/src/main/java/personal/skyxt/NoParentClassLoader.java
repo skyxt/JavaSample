@@ -3,13 +3,12 @@ package personal.skyxt;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class WebAppClassLoader extends URLClassLoader {
+public class NoParentClassLoader extends URLClassLoader {
 
-    public WebAppClassLoader(URL[] urls) {
+    public NoParentClassLoader(URL[] urls) {
         super(urls, null);
     }
 
-    //TODO 先查本ClassLoader,如果没有再找父加载器
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         synchronized (getClassLoadingLock(name)) {
